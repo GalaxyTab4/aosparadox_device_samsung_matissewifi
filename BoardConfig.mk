@@ -61,6 +61,7 @@ BLUETOOTH_HCI_USE_MCT := true
 
 # Camera
 USE_DEVICE_SPECIFIC_CAMERA := true
+TARGET_PROVIDES_CAMERA_HAL := true
 
 # Charger
 # BOARD_CHARGING_MODE_BOOTING_LPM := /sys/mmi_lpm/lpm_mode
