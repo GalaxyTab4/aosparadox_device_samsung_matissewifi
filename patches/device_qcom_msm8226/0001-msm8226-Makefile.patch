@@ -1,0 +1,38 @@
+From 43d03f466c0b3d20cdeeedf741a4034a8614a4ba Mon Sep 17 00:00:00 2001
+From: sub77 <sub77@ymail.com>
+Date: Fri, 7 Aug 2015 02:20:03 +0200
+Subject: [PATCH] msm8226 Makefile
+
+---
+ msm8226.mk | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
+ mode change 100644 => 100755 msm8226.mk
+
+diff --git a/msm8226.mk b/msm8226.mk
+old mode 100644
+new mode 100755
+index 24af5e4..48acd19
+--- a/msm8226.mk
++++ b/msm8226.mk
+@@ -25,8 +25,7 @@ PRODUCT_DEVICE := msm8226
+ # Audio configuration file
+ PRODUCT_COPY_FILES += \
+     device/qcom/msm8226/audio_policy.conf:system/etc/audio_policy.conf \
+-    device/qcom/msm8226/audio_effects.conf:system/vendor/etc/audio_effects.conf \
+-    device/qcom/msm8226/mixer_paths.xml:system/etc/mixer_paths.xml
++    device/qcom/msm8226/audio_effects.conf:system/vendor/etc/audio_effects.conf
+ 
+ PRODUCT_PACKAGES += \
+     libqcomvisualizer \
+@@ -35,7 +34,7 @@ PRODUCT_PACKAGES += \
+ 
+ # Bluetooth configuration files
+ #PRODUCT_COPY_FILES += \
+-    system/bluetooth/data/main.le.conf:system/etc/bluetooth/main.conf
++#    system/bluetooth/data/main.le.conf:system/etc/bluetooth/main.conf
+ 
+ #fstab.qcom
+ PRODUCT_PACKAGES += fstab.qcom
+-- 
+2.1.0
+

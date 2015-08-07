@@ -1,0 +1,27 @@
+From dd0167b3d8b8eb23f7c1ca669f6e224ceabe76c3 Mon Sep 17 00:00:00 2001
+From: sub77 <sub77@ymail.com>
+Date: Fri, 7 Aug 2015 02:18:40 +0200
+Subject: [PATCH] gpio keylayout
+
+---
+ gpio-keys.kl | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+ mode change 100644 => 100755 gpio-keys.kl
+
+diff --git a/gpio-keys.kl b/gpio-keys.kl
+old mode 100644
+new mode 100755
+index d7b70cf..098d73f
+--- a/gpio-keys.kl
++++ b/gpio-keys.kl
+@@ -27,6 +27,6 @@
+ 
+ key 115   VOLUME_UP
+ key 114   VOLUME_DOWN
+-key 102   HOME
++key 102   HOME WAKE
+ key 528   FOCUS
+ key 766   CAMERA
+-- 
+2.1.0
+

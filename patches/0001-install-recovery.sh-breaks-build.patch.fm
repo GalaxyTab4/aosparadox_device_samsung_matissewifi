@@ -1,0 +1,34 @@
+From d01456915fcc4b8fea31f124327bd27670f2a378 Mon Sep 17 00:00:00 2001
+From: sub77 <sub77@ymail.com>
+Date: Fri, 7 Aug 2015 02:10:43 +0200
+Subject: [PATCH] install-recovery.sh breaks build
+
+---
+ core/Makefile | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/core/Makefile b/core/Makefile
+index 2fd91ed..01c5233 100644
+--- a/core/Makefile
++++ b/core/Makefile
+@@ -798,7 +798,7 @@ recovery_fstab := $(strip $(wildcard $(TARGET_DEVICE_DIR)/recovery.fstab))
+ endif
+ # Named '.dat' so we don't attempt to use imgdiff for patching it.
+ RECOVERY_RESOURCE_ZIP := $(TARGET_OUT)/etc/recovery-resource.dat
+-RECOVERY_PATCH_INSTALL := $(TARGET_OUT)/bin/install-recovery.sh
++##RECOVERY_PATCH_INSTALL := $(TARGET_OUT)/bin/install-recovery.sh
+ 
+ ifeq ($(recovery_resources_private),)
+   $(info No private recovery resources for TARGET_DEVICE $(TARGET_DEVICE))
+@@ -942,7 +942,7 @@ endif
+ 	$(hide) cp -r $(PRODUCT_OUT)/boot.img $(ota_temp_root)/BOOTABLE_IMAGES/
+ 	$(hide) cp -r $(PRODUCT_OUT)/recovery.img $(ota_temp_root)/BOOTABLE_IMAGES/
+ 	$(hide) ./build/tools/releasetools/make_recovery_patch $(ota_temp_root) $(ota_temp_root)
+-	$(hide) cp --remove-destination $(ota_temp_root)/SYSTEM/bin/install-recovery.sh $(TARGET_OUT)/bin/install-recovery.sh
++##	$(hide) cp --remove-destination $(ota_temp_root)/SYSTEM/bin/install-recovery.sh $(TARGET_OUT)/bin/install-recovery.sh
+ 	$(hide) cp --remove-destination $(ota_temp_root)/SYSTEM/recovery-from-boot.p $(TARGET_OUT)/recovery-from-boot.p
+ $(RECOVERY_RESOURCE_ZIP): $(INSTALLED_RECOVERYIMAGE_TARGET)
+ 	$(hide) mkdir -p $(dir $@)
+-- 
+2.1.0
+

@@ -1,0 +1,317 @@
+From b04c318438db68c36c884dac79b6c94b03b56aa9 Mon Sep 17 00:00:00 2001
+From: sub77 <sub77@ymail.com>
+Date: Fri, 7 Aug 2015 02:16:34 +0200
+Subject: [PATCH] WCNSS
+
+---
+ WCNSS_cfg.dat          | Bin 10810 -> 10746 bytes
+ WCNSS_qcom_cfg.ini     | 140 ++++++++++++++++++++++++++++++++-----------------
+ WCNSS_qcom_wlan_nv.bin | Bin 29816 -> 29816 bytes
+ 3 files changed, 91 insertions(+), 49 deletions(-)
+ mode change 100644 => 100755 WCNSS_cfg.dat
+ mode change 100644 => 100755 WCNSS_qcom_cfg.ini
+ mode change 100644 => 100755 WCNSS_qcom_wlan_nv.bin
+
+diff --git a/WCNSS_cfg.dat b/WCNSS_cfg.dat
+old mode 100644
+new mode 100755
+index f8a9177a8e8abfeafc8f928d6594b2c4a2c5497e..e3434036962cdcb9ffafaae1d64d977e52c9cd46
+GIT binary patch
+delta 143
+zcmdlL@+;Vsk%yU^k%5WvmnH)P69WSS3lM7n@evUQ238>b21xUWGBCW~2Z82{3=Cg4
+znm%UPtiXDMc@yUa=FK;Ft}t)jB9Oqs3X=S_SyB`z%OdrLd9u2kz+@iIBa<Jn@oc`p
+l*~2(_fuhJ{2d)Q`eRx_XA7EwK{6g^w^X4n6DJ)FR$^auUEcXBa
+
+delta 186
+zcmewryeq_%k%yU^k%5WPN{fMkiGhKE1&B3(_=yMu11pf`5oKV|0pj=jAkdPLf#Lf`
+z)5k0vUkmsdz7_DZOnxBgu{nWt0`ue+MUl;aIF2w+PT=6!e1PW)GdoZ*gAoJ6=E(wy
+zEUX}{e>VRVdCbE43#j+^=9`l5L7F5c12s)z=h=LKvxjkVfuhJ{1Fi>?ZFpM1=B!bC
+Nfn<(qDht!!Pyn}FI6eRX
+
+diff --git a/WCNSS_qcom_cfg.ini b/WCNSS_qcom_cfg.ini
+old mode 100644
+new mode 100755
+index be4425b..f364332
+--- a/WCNSS_qcom_cfg.ini
++++ b/WCNSS_qcom_cfg.ini
+@@ -11,6 +11,10 @@ gEnableImps=1
+ gEnableIdleScan=0
+ 
+ 
++# Enable/Disable vsta based on MAX Assoc limit
++gEnableVSTASupport=1
++
++
+ # Increase sleep duration (seconds) during IMPS
+ # 0 implies no periodic wake up from IMPS. Periodic wakeup is
+ # unnecessary if Idle Scan is disabled.
+@@ -26,7 +30,6 @@ gEnableBmps=1
+ 
+ gEnableSuspend=3
+ 
+-
+ # Phy Mode (auto, b, g, n, etc)
+ # Valid values are 0-9, with 0 = Auto, 4 = 11n, 9 = 11ac
+ gDot11Mode=0
+@@ -90,6 +93,10 @@ McastBcastFilter=3
+ hostArpOffload=1
+ 
+ 
++#Flag to enable HostNSOffload feature or not
++
++hostNSOffload=0
++
+ #SoftAP Related Parameters
+ 
+ # AP MAc addr
+@@ -109,7 +116,7 @@ gEnableApOBSSProt=1
+ 
+ #Enable/Disable UAPSD for SoftAP
+ 
+-gEnableApUapsd=1
++gEnableApUapsd=0
+ 
+ 
+ # Fixed Rate
+@@ -146,16 +153,22 @@ WmmIsEnabled=0
+ 
+ g11dSupportEnabled=1
+ 
++# 802.11h support
++
++g11hSupportEnabled=1
++
+ # CCX Support and fast transition
+ CcxEnabled=0
+ FastTransitionEnabled=1
+ ImplicitQosIsEnabled=0
+ gNeighborScanTimerPeriod=200
+ 
+-gNeighborLookupThreshold=78
++gNeighborLookupThreshold=76
++gNeighborReassocThreshold=81
+ 
+ gNeighborScanChannelMinTime=20
+ gNeighborScanChannelMaxTime=30
++gMaxNeighborReqTries=3
+ 
+ # Legacy (non-CCX, non-802.11r) Fast Roaming Support
+ # To enable, set FastRoamEnabled=1
+@@ -163,11 +176,22 @@ gNeighborScanChannelMaxTime=30
+ FastRoamEnabled=1
+ 
+ #Check if the AP to which we are roaming is better than current AP in terms of RSSI.
+-#Checking is disabled if set to Zero.Otherwise it will use this value as to how better
++#Checking is disabled if set to Zero.Otherwise it will use this value as to how better 
+ #the RSSI of the new/roamable AP should be for roaming
+-RoamRssiDiff=5
++RoamRssiDiff=3
++
++# If the RSSI of any available candidate is better than currently associated
++# AP by at least gImmediateRoamRssiDiff, then being to roam immediately (without
++# registering for reassoc threshold).
++# NOTE: Value of 0 means that we would register for reassoc threshold.
++gImmediateRoamRssiDiff=10
+ 
+-# SAP Country code
++# To enable, set gRoamIntraBand=1 (Roaming within band)
++# To disable, set gRoamIntraBand=0 (Roaming across band)
++
++gRoamIntraBand=0
++
++#SAP Country code
+ 
+ # Default Country Code is 2 bytes, 3rd byte is optional indoor or out door.
+ 
+@@ -202,7 +226,7 @@ gAPAutoShutOff=0
+ 
+ # 1 = enable auto channel selection, channel provided by supplicant will be ignored
+ 
+-gApAutoChannelSelection=1
++gApAutoChannelSelection=0
+ 
+ 
+ # Listen Energy Detect Mode Configuration
+@@ -254,9 +278,9 @@ BandCapability=0
+ 
+ #Beacon Early Termination (1 = enable the BET feature, 0 = disable)
+ 
+-enableBeaconEarlyTermination=1
++enableBeaconEarlyTermination=0
+ 
+-beaconEarlyTerminationWakeInterval=11
++beaconEarlyTerminationWakeInterval=3
+ 
+ 
+ #Bluetooth Alternate Mac Phy (1 = enable the BT AMP feature, 0 = disable)
+@@ -264,7 +288,7 @@ beaconEarlyTerminationWakeInterval=11
+ gEnableBtAmp=0
+ 
+ 
+-#SOFTAP Channel Range selection
++#SOFTAP Channel Range selection 
+ 
+ gAPChannelSelectStartChannel=1
+ 
+@@ -284,37 +308,21 @@ gChannelBondingMode5GHz=1
+ 
+ #Enable Keep alive with non-zero period value
+ 
+-gStaKeepAlivePeriod=30
+-
+-
+-#Say gGoKeepAlivePeriod(5 seconds) and gGoLinkMonitorPeriod(10 seconds).
+-#For every 10 seconds DUT sends Qos Null frame(i.e., Keep Alive frame if link is idle for last 10 seconds.)
+-#For both active and power save clients.
+-
+-#Power save clients: DUT set TIM bit from 10th second onwards and till client honors TIM bit.
+-#If doesn't honor for 5 seconds then Driver remove client.
+-
+-#Active clients: DUT send Qos Null frame for 10th seconds onwards if it is not success still DUT try on
+-#11th second if not tries on 12th and so on till 15th second. Hence before disconnection DUT will send 5 NULL frames.
+-#Hence in any case DUT will detect client got removed in (10+5) seconds. i.e., (gGoKeepAlivePeriod +gGoLinkMonitorPeriod)..
+-
+-#gGoLinkMonitorPeriod/ gApLinkMonitorPeriod is period where link is idle and it is period
+-#where we send NULL frame.
++#gStaKeepAlivePeriod = 30
+ 
+-gApLinkMonitorPeriod = 30
++#AP LINK MONITOR TIMEOUT is used for both SAP and GO mode.
++#It is used to change the frequency of keep alive packets in the AP Link Monitor period which is by
++#default 20s. Currently the keep alive packets are sent as an interval of 3s but after this change
++#the keep alive packet frequency can be changed.
+ 
+-gGoLinkMonitorPeriod = 10
++#gApLinkMonitorPeriod = 3
+ 
+-#gGoKeepAlivePeriod/gApKeepAlivePeriod is time to spend to check whether frame are succeed to send or not.
+-#Hence total effective detection time is gGoLinkMonitorPeriod+ gGoKeepAlivePeriod/gApLinkMonitorPeriod+ gApKeepAlivePeriod.
+-#gGoKeepAlivePeriod = 5
+ 
+-#gApKeepAlivePeriod = 5
+ #If set will start with active scan after driver load, otherwise will start with
+ 
+ #passive scan to find out the domain
+ 
+-#gEnableBypass11d=1
++gEnableBypass11d=1
+ 
+ 
+ #If set to 0, will not scan DFS channels
+@@ -342,22 +350,48 @@ gDataInactivityTimeout=200
+ gVhtRxMCS=2
+ gVhtTxMCS=2
+ 
+-gEnableLpwrImgTransition=1
++# Enable CRDA regulatory support by settings default country code
++#gCrdaDefaultCountryCode=TW
+ 
+-# Enable Tx beamforming
+-gTxBFEnable=1
++# Scan Timing Parameters
++# gPassiveMaxChannelTime=110
++# gPassiveMinChannelTime=60
++# gActiveMaxChannelTime=40
++# gActiveMinChannelTime=20
+ 
+-# Enable Tx LDPC
+-#gTxLdpcEnable = 1 for HT mode, 2 for VHT mode,3 for both HT and VHT
+-gTxLdpcEnable=3
++#If set to 0, MCC is not allowed.
++gEnableMCCMode=1
+ 
+-#FlexConnect Power Factor
+-#Default is set to 0 (disable)
+-gFlexConnectPowerFactor=0
++# 1=enable STBC; 0=disable STBC 
++gEnableRXSTBC=1
++
++# Enable Active mode offload
++gEnableActiveModeOffload=1
++
++#Enable Scan Results Aging based on timer 
++#Timer value is in seconds
++#If Set to 0 it will not enable the feature
++gScanAgingTime=0
++
++#Enable Power saving mechanism Based on Android Framework
++#If set to 0 Driver internally control the Power saving mechanism
++#If set to 1 Android Framwrok control the Power saving mechanism
++isAndroidPsEn=0
++
++#disable LDPC in STA mode if the AP is TXBF capable
++gDisableLDPCWithTxbfAP=1
++
++#Enable thermal mitigation
++gThermalMitigationEnable=1
+ 
+-# Valid values are 2048,4096,8192 and so on
+-# Please don't use values other than the ones mentioned above
+-gMaxMediumTime=4096
++gEnableFastRoamInConcurrency=1
++
++#List of Country codes for which 11ac needs to be disabled
++#Each country code must be delimited by comma(,)
++gListOfNon11acCountryCode=RU,UA,ZA
++
++#Maxium Channel time in msec
++gMaxMediumTime = 6000
+ 
+ # 802.11K support
+ gRrmEnable=1
+@@ -365,11 +399,19 @@ gRrmOperChanMax=8
+ gRrmNonOperChanMax=8
+ gRrmRandIntvl=100
+ 
+-#Enable/Disable Modulated DTIM feature
+-gEnableModulatedDTIM=3
++#Scan offload
++gEnableDirectedScanOffload=0
++
++# Oxygen network (prop IE for IBSS)
++gEnableOxygenNwk=0
++
++#FlexConnect Power Factor
++#Default is set to 0 (disable)
++gFlexConnectPowerFactor=0
+ 
+-#max LI value for modulated DTIM
+-gMaxLIModulatedDTIM=3
++#SAP/P2P-GO mode traffic monitor
++gEnableTrafficMonitor=1
++gTrafficIdleTimeout=3000
+ 
+ END
+ 
+diff --git a/WCNSS_qcom_wlan_nv.bin b/WCNSS_qcom_wlan_nv.bin
+old mode 100644
+new mode 100755
+index 2397b4f3ee37f3b0a77c93edaa351208b48b36a8..621c66542f20cc338a44fe95197378687dd9ee11
+GIT binary patch
+delta 2372
+zcmds1y>1gh5Z<|%<a}~Lgu#v=f&v637C&-`6rmu61_?U+08|K&pn-}IL`jj;wrP-f
+zfJECw!8tji2+8@PyMSEr0B)e7NQIg4dd#jJ&JMWZMx))G`DXW<*||Mv!a)<3?_6*v
+zgkZhu_Rrss3-L@YWeQnBbyqWwaK*~;<h_ad_1JG8VJyG@?ykBF=b=Psj^L;l7@0?1
+z&FCo0FV`}&s^+|cQjD9DQrOW#7m1IxE1qVaI>^tt(AY3Cpqy!+0e*Skol>iA8RYTt
+zGbIA2k?HeyO7H+=GkZeb%AJzm^4{5k(<7olqODMnbGg%3+7`0Hq?klSuSV#Zj?i-;
+z6slj!Uw_#W;^C21`QAL>v91TWlNMYS<@bE{aSvCUJM%~%56?koWasn0<WR;tAnm=2
+z6||9>cE*-lY4_0IHReqW*EMFv&8}evCM%l%JzMUY^u9><+Fg@|rLGx$4qWlh$wiw%
+zdc|$5UYQji{eL=r=zq#Q=uNqXZv=~7TeB~^2;)^5X>F%2;)~XnE*n169DD0KIL55+
+zXc;dK#n@z@G9M!MPPE|9pY{HwzsKPAym~$jH|~85f~{IL2x^<bhs}*ooi7Tv>wDW#
+z6zxWhIN49)dK~XJ!Y;H83+p>OQMen0_2e^RlD#<j5=-CPP_HWsC%u&x3)&V`@ktRb
+y0rH>lbP~Cre-?~*Q&|R<AHc#Eu7e({4#~MOma0=hVXQflU9IKbf~q}TcYXo9Fw#u`
+
+delta 1665
+zcmc(fJ5K^Z5P)YEMKK7c=-qjoC$Z6zSXyCX421<H|3PD*($2(KSs2as{sxn4jIppl
+zI1%xTkJ#E#T3ApK_i=Y%<cx{0`Et9no0*%Loz1pe*lyv$s<A!<(Ep>I0gEJ}Y??i6
+z<*9-hTft={xhOpvFk)MS0J$jp4$Io0STF?_?DFs?QYC8sz1<$hR8+y@&}>{=(}_g&
+zW*vmc6<QvEYM@(82b5-F#0fzfIa8oRn$Z=$67lS%(l*kUk)+{yNWbow!W7LWbeh*v
+zbJAY}29M^^we>W*Kd#eGY$z7QqsMXGE|f|<l46EL;@;!^>n9)(rxMisv-NMI(hs6A
+zfN1X+Ba#n&>dli_K40q7%vT#__Dd6$;QFZRtlJVb&}1jX?k}C6iAD$tKyO#!^Q`zy
+z_HX$2Z?%cZFho}Wc324v;Xl(dFdl~gPS8jso3%Hmak22k<niJDPKqO?dE>gbuIpZ3
+zH?HbV?V?htR2`>U4@`wwlUZ=1Mx%b|RGCf9sX6p{<ka3Nu1vB=qG0PAI?e|V2vbU(
+paG2|E@fCfF#K+(1{SiPW!r2YTM9#<=@ojr&zVDYlYM+-+$Qwl<1*QN1
+
+-- 
+2.1.0
+

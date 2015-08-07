@@ -1,0 +1,29 @@
+From a086ada357f9d172a1d7e0c2b5fa45a438db8c34 Mon Sep 17 00:00:00 2001
+From: Ricardo Cerqueira <cyanogenmod@cerqueira.org>
+Date: Tue, 5 Nov 2013 03:33:44 +0000
+Subject: [PATCH] Add libminshacrypt static lib
+
+This is a sha-only version of libmincrypt, to provide the new
+SHA_hash implementation to binaries that require libcrypto_static
+---
+ libmincrypt/Android.mk | 7 +++++++
+ 1 file changed, 7 insertions(+)
+
+diff --git a/libmincrypt/Android.mk b/libmincrypt/Android.mk
+index 090d0e5..da53296 100644
+--- a/libmincrypt/Android.mk
++++ b/libmincrypt/Android.mk
+@@ -7,6 +7,13 @@ LOCAL_MODULE := libmincrypt
+ LOCAL_SRC_FILES := rsa.c sha.c sha256.c
+ include $(BUILD_STATIC_LIBRARY)
+ 
++## Crippled version without an RSA implementation
++## to coexist with libcrypto_static and provide SHA_hash
++include $(CLEAR_VARS)
++LOCAL_MODULE := libminshacrypt
++LOCAL_SRC_FILES := sha.c sha256.c
++include $(BUILD_STATIC_LIBRARY)
++
+ include $(CLEAR_VARS)
+ 
+ LOCAL_MODULE := libmincrypt
