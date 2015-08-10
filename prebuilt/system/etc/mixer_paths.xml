@@ -350,7 +350,8 @@
 
 	<!-- ================================================================ -->
 	<!-- Recording Scenario	-->
-	<path name="rec-main-mic">
+	<!-- <path name="rec-main-mic"> -->
+	<path name="handset-mic">
 		<ctl name="Main Mic Delay" value="4" />
 		<path name="main-mic" />
 		<ctl name="ADC1 Volume" value="23" />
