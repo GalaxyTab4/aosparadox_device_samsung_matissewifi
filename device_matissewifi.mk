@@ -32,8 +32,12 @@ PRODUCT_AAPT_PREF_CONFIG := hdpi
 
 # Packs
 PRODUCT_PACKAGES += \
-    openssh
-
+    libssh \
+	ssh \
+	sftp \
+	scp \
+	sshd \
+	ssh-keygen
 
 #CAF Branch
 PRODUCT_DEFAULT_PROPERTY_OVERRIDES += \
