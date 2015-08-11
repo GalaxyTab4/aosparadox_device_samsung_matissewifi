@@ -30,6 +30,17 @@ PRODUCT_COPY_FILES += \
 PRODUCT_AAPT_CONFIG := normal
 PRODUCT_AAPT_PREF_CONFIG := mdpi
 
+# Extra tools from CM
+PRODUCT_PACKAGES += \
+	e2fsck \
+	mke2fs \
+	tune2fs \
+	mount.exfat \
+	fsck.exfat \
+	mkfs.exfat \
+	ntfsfix \
+	ntfs-3g
+
 # Packs
 PRODUCT_PACKAGES += \
     libssh \
