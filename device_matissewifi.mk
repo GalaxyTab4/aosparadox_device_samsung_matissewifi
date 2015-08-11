@@ -37,7 +37,8 @@ PRODUCT_PACKAGES += \
 	sftp \
 	scp \
 	sshd \
-	ssh-keygen
+	ssh-keygen }
+	start-ssh
 
 PRODUCT_PACKAGES += \
 	ROMSettings \
