@@ -39,6 +39,10 @@ PRODUCT_PACKAGES += \
 	sshd \
 	ssh-keygen
 
+PRODUCT_PACKAGES += \
+	ROMSettings \
+	LayerManager
+
 #CAF Branch
 PRODUCT_DEFAULT_PROPERTY_OVERRIDES += \
     ro.par.branch=LA.BF.1.1.2_rb1.24
