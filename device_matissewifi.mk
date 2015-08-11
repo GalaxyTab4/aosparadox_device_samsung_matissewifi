@@ -28,7 +28,7 @@ PRODUCT_COPY_FILES += \
     frameworks/native/data/etc/tablet_core_hardware.xml:system/etc/permissions/tablet_core_hardware.xml
 
 PRODUCT_AAPT_CONFIG := normal
-PRODUCT_AAPT_PREF_CONFIG := hdpi
+PRODUCT_AAPT_PREF_CONFIG := mdpi
 
 # Packs
 PRODUCT_PACKAGES += \
@@ -37,7 +37,7 @@ PRODUCT_PACKAGES += \
 	sftp \
 	scp \
 	sshd \
-	ssh-keygen }
+	ssh-keygen \
 	start-ssh
 
 PRODUCT_PACKAGES += \
