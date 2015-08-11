@@ -132,3 +132,8 @@ audio.offload.gapless.enabled=true
 
 #property to set minimum frequency as 787Mhz by default
 ro.min_freq_0=787200
+
+ro.build.fingerprint="samsung/matissewifixx/matissewifi:5.0.2/LRX22G/T530XXU1BOD8:user/release-keys
+ro.build.description=matissewifixx-user 5.0.2 LRX22G T530XXU1BOD8 release-keys
+ro.product.model=SM-T530
+ro.product.device=matissewifi
