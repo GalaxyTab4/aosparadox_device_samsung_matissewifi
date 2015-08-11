@@ -198,7 +198,8 @@ PRODUCT_PACKAGES += \
     wpa_supplicant_overlay.conf
 
 PRODUCT_COPY_FILES += \
-	device/qcom/msm8226/hostapd.conf:system/etc/hostapd/hostapd_default.conf
+	device/qcom/msm8226/hostapd.conf:system/etc/hostapd/hostapd_default.conf \
+    vendor/qcom/opensource/wlan/prima/firmware_bin/WCNSS_cfg.dat:system/etc/firmware/wlan/prima/WCNSS_cfg.dat 
 
 PRODUCT_PACKAGES += \
     libcurl \
